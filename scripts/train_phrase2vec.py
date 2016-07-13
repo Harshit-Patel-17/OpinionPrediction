@@ -18,7 +18,7 @@ opinion_indices = pd.read_csv("../corpus/OpinionLabels.txt", header=None)
 #Build train data and test data
 m = data.shape[0]
 #n = politicians_model.docvecs[0].shape[0] + topics_model.docvecs[0].shape[0]
-n = 1 + topics_model.docvecs[0].shape[0]
+n = politicians_model.docvecs[0].shape[0] + topics_model.docvecs[0].shape[0]
 X = np.zeros((m, n), dtype=np.float)
 Y = np.zeros(m, dtype=np.int)
 
@@ -31,7 +31,7 @@ for index, row in data.iterrows():
 	topic_vec = topics_model.docvecs[topic_index]
 	if(opinion_index == 2):
 		continue
-	X[m] = np.concatenate((np.asarray([politician_index]), topic_vec))
+	X[m] = np.concatenate((politician_vec, topic_vec))
 	Y[m] = opinion_index
 	m = m + 1
 
@@ -42,10 +42,17 @@ X = X[indices]
 Y = Y[indices]
 
 #Train SVM
-from sklearn import svm, tree, cross_validation, naive_bayes
-clf = svm.SVC()
+from sklearn import svm, tree, cross_validation, naive_bayes, grid_search
+parameters = {'criterion':['gini', 'entropy'], 'max_depth':[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+clf = tree.DecisionTreeClassifier(max_depth=40)
+'''
+gs = grid_search.GridSearchCV(clf, parameters)
+gs.fit(X, Y)
+print gs.best_score_
+print gs.best_estimator_.criterion
+print gs.best_estimator_.max_depth
+'''
 scores = cross_validation.cross_val_score(clf, X, Y, cv=5)
-
 print scores
 
 '''

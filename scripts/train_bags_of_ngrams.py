@@ -49,11 +49,27 @@ X_tf_idf = X_tf_idf[indices]
 target = target[indices]
 
 #Train model	
-from sklearn import naive_bayes, tree, cross_validation, svm, linear_model
+from sklearn import naive_bayes, tree, cross_validation, svm, linear_model, semi_supervised
+
 clf = tree.DecisionTreeClassifier()
 scores = cross_validation.cross_val_score(clf, X_tf_idf, target, cv=5)
-print scores
+print "Decision Tree", scores
 
 clf = naive_bayes.MultinomialNB()
 scores = cross_validation.cross_val_score(clf, X_tf_idf, target, cv=5)
-print scores
+print "Naive Bayes", scores
+
+'''
+#Label Propagation
+print "Training model"
+kf = cross_validation.KFold(X_tf_idf.shape[0], n_folds=5)
+clf = semi_supervised.label_propagation.LabelPropagation(kernel='knn')
+scores = []
+for train, test in kf:
+	Y = np.copy(target)
+	Y[test] = -1
+	clf.fit(X_tf_idf.toarray(), Y)
+	scores.append(float(len(np.where(Y[test] == target[test])[0]))/len(test))
+	print scores
+'''
+
