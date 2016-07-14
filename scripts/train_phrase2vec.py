@@ -41,22 +41,45 @@ shuffle(indices)
 X = X[indices]
 Y = Y[indices]
 
-#Train SVM
+#Find best parameters
 from sklearn import svm, tree, cross_validation, naive_bayes, grid_search
-parameters = {'criterion':['gini', 'entropy'], 'max_depth':[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
-clf = tree.DecisionTreeClassifier(max_depth=40)
 '''
+#parameters = {'criterion':['gini', 'entropy'], 'max_depth':[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+parameters = {'criterion':['gini', 'entropy'], 'max_depth':[25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]}
+clf = tree.DecisionTreeClassifier()
+
 gs = grid_search.GridSearchCV(clf, parameters)
 gs.fit(X, Y)
 print gs.best_score_
 print gs.best_estimator_.criterion
 print gs.best_estimator_.max_depth
 '''
-scores = cross_validation.cross_val_score(clf, X, Y, cv=5)
-print scores
 
-'''
-print "Prediction Accuracy:"
-print float(len(np.where(predictions == Ytest)[0])) / len(Ytest)
-print predictions
-'''
+#Train
+from sklearn.learning_curve import learning_curve
+clf = tree.DecisionTreeClassifier(criterion='gini', max_depth=35)
+train_sizes, train_scores, valid_scores = learning_curve(clf, X, Y, cv=10)
+print train_sizes
+print train_scores
+print np.average(valid_scores, axis=1)
+#scores = cross_validation.cross_val_score(clf, X, Y, cv=5)
+#print scores
+
+#Plot learning curve
+import matplotlib.pyplot as plt
+
+trn_acc, = plt.plot(train_sizes, np.average(train_scores, axis=1), marker="o", linestyle="-")
+val_acc, = plt.plot(train_sizes, np.average(valid_scores, axis=1), marker="o", linestyle="--")
+
+plt.xlabel("Training set size")
+plt.ylabel("Accuracy(%)")
+plt.title("Accuracy in Decision Tree")
+plt.legend([trn_acc, val_acc], ["On training data", "On test data"], loc=4)
+
+for i, j in zip(train_sizes, np.average(train_scores, axis=1)):
+	plt.annotate(str(j)[:4], xy=(i-100, j+0.01))
+
+for i, j in zip(train_sizes, np.average(valid_scores, axis=1)):
+	plt.annotate(str(j)[:4], xy=(i-100, j+0.01))
+
+plt.show()
