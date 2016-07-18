@@ -18,7 +18,7 @@ opinion_indices = pd.read_csv("../corpus/OpinionLabels.txt", header=None)
 #Build train and test nodes
 m = data.shape[0]
 
-train_size = [195, 635, 1074, 1514, 1954]
+train_size = [200, 600, 1000, 1600, 2000]
 
 from random import shuffle
 indices = range(m)
@@ -30,9 +30,10 @@ for size in train_size:
 	with open(train_file, "w") as train_nodes:
 		with open(test_file, "w") as test_nodes:	
 			for i in range(m):
-				row = data.loc[[i]]
-				opinion = row[1][i].strip()
-				line = "N" + `i` + "\t" + opinion + "\t1.0\n"
+				index = indices[i]
+				row = data.loc[[index]]
+				opinion = row[1][index].strip()
+				line = "N" + `index` + "\t" + opinion + "\t1.0\n"
 				if i < size:
 					train_nodes.write(line)
 				else:

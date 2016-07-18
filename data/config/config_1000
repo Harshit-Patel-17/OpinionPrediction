@@ -9,17 +9,17 @@ data_format = edge_factored
 
 # Specifies the seed label information to be injected into
 # selected nodes at the start of the algorithm.
-seed_file = ../seeds/train_nodes_195.txt
+seed_file = ../seeds/train_nodes_1000.txt
 
 # Gold labels of nodes (if known). This gold label information
 # is used only during evaluation.
-gold_labels_file = ../gold_nodes/gold_nodes_195.txt
+gold_labels_file = ../gold_nodes/gold_nodes_1000.txt
 
 # Nodes (along with corresponding gold label information) which
 # are used during evaluation, if any. This is kept as separate
 # option from the gold_labels_file, as we may not evaluate all
 # nodes whose gold label information is known. 
-test_file = ../gold_nodes/gold_nodes_195.txt
+test_file = ../gold_nodes/gold_nodes_1000.txt
 
 # Number of label propagation rounds
 iters = 10
@@ -30,9 +30,9 @@ verbose = true
 prune_threshold = 0
 
 # Choose one of the three label propagations algorithms
-#algo = lp_zgl
+algo = lp_zgl
 #algo = adsorption
-algo = mad
+#algo = mad
 
 # Hyperparameters for Adsorption and MAD
 mu1 = 1
@@ -50,4 +50,4 @@ beta = 2
 # For nodes for which gold (or seed label) information is not known, the corresponding
 # field is left empty.
 #
-output_file = ../output_nodes/label_prop_output_195.txt
+output_file = ../output_nodes/label_prop_output_1000.txt

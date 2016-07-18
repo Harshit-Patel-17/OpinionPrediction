@@ -1,5 +1,7 @@
-train_sizes = [195, 635, 1074, 1514, 1954]
+train_sizes = [200, 600, 1000, 1600, 2000]
 accuracies = []
+
+print "training_set_size , accuracy"
 
 for size in train_sizes:
 	correct_predictions = 0
@@ -14,7 +16,9 @@ for size in train_sizes:
 				if(estimated_label == gold_label):
 					correct_predictions += 1
 				total_predictions += 1
-	accuracies.append(float(correct_predictions) / total_predictions)
+	accuracy = float(correct_predictions) / total_predictions
+	print size, ",", accuracy
+	accuracies.append(accuracy)
 
 #Plot learning curve
 import matplotlib.pyplot as plt
