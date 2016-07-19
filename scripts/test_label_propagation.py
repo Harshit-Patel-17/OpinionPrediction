@@ -6,7 +6,7 @@ print "training_set_size , accuracy"
 for size in train_sizes:
 	correct_predictions = 0
 	total_predictions = 0
-	file_name = "../data/output_nodes/label_prop_output_" + `size` + ".txt"
+	file_name = "../data/ngrams_graphs/output_nodes/label_prop_output_" + `size` + ".txt"
 	with open(file_name) as label_prop_output:
 		for line in label_prop_output:
 			row = line.split("\t")

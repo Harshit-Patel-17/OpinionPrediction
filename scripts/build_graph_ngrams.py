@@ -1,7 +1,7 @@
 #Load Data
 import numpy as np
 import pandas as pd
-data = pd.read_csv("../data/PoliticianData.csv", header=None)
+data = pd.read_csv("../data/PoliticianData2Classes.csv", header=None)
 politician_indices = pd.read_csv("../corpus/PoliticianLabels.txt", header=None)
 topic_indices = pd.read_csv("../corpus/TopicLabels.txt", header=None)
 opinion_indices = pd.read_csv("../corpus/OpinionLabels.txt", header=None)
@@ -18,36 +18,55 @@ with open("../corpus/TopicsCorpora.txt", "r") as infile:
 	for line in infile:
 		topic_corpora.append(line)
 
-documents = []
-target = []
-for index, row in data.iterrows():
-	politician_index = politician_indices[politician_indices[0] == row[0].strip()].index.tolist()[0]
-	opinion_index = opinion_indices[opinion_indices[0] == row[1].strip()].index.tolist()[0]
-	topic_index = topic_indices[topic_indices[0] == row[2].strip()].index.tolist()[0]
-	if(opinion_index == 2):
-		continue
-	documents.append(politician_corpora[politician_index].strip() + " " + topic_corpora[topic_index].strip())
-	target.append(opinion_index)
-
-target = np.asarray(target)
-
-#Extract features
+#Build n-grams
 from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer(ngram_range=(3,3))
-X_counts = count_vect.fit_transform(documents)
+politician_counts = count_vect.fit_transform(politician_corpora)
+topic_counts = count_vect.fit_transform(topic_corpora)
 
 #Apply tf-idf downscaling
 from sklearn.feature_extraction.text import TfidfTransformer
 tf_idf_transformer = TfidfTransformer()
-X_tf_idf = tf_idf_transformer.fit_transform(X_counts)
+politician_tf_idf = tf_idf_transformer.fit_transform(politician_counts)
+topic_tf_idf = tf_idf_transformer.fit_transform(topic_counts)
 
-print X_tf_idf.shape
-print X_tf_idf.toarray()[0]
+#Compute similarity
+politician_similarity = []
+topic_similarity = []
+from sklearn.metrics.pairwise import linear_kernel
+for i in range(politician_indices.shape[0]):
+	politician_similarity.append(linear_kernel(politician_tf_idf[i], politician_tf_idf).flatten())
+for i in range(topic_indices.shape[0]):
+	topic_similarity.append(linear_kernel(topic_tf_idf[i], topic_tf_idf).flatten())
 
-#Shuffle data
-from random import shuffle
-indices = range(len(target))
-shuffle(indices)
-X_tf_idf = X_tf_idf[indices]
-target = target[indices]
-
+m = data.shape[0]
+#Generate graph
+print "Generating graph"
+base = "../data/ngrams_graphs/graphs/"
+with open(base + "similarity_graph_0.txt", "w") as similarity_graph_0:
+	with open(base + "similarity_graph_2.txt", "w") as similarity_graph_2:
+		with open(base + "similarity_graph_4.txt", "w") as similarity_graph_4:
+			with open(base + "similarity_graph_6.txt", "w") as similarity_graph_6:
+				with open(base + "similarity_graph_8.txt", "w") as similarity_graph_8:
+					with open(base + "similarity_graph_10.txt", "w") as similarity_graph_10:
+						for i in range(0, m-1):
+							print i
+							row1 = data.loc[[i]]
+							P1_index = politician_indices[politician_indices[0] == row1[0][i].strip()].index.tolist()[0]
+							T1_index = topic_indices[topic_indices[0] == row1[2][i].strip()].index.tolist()[0]
+							for j in range(i+1, m):
+								row2 = data.loc[[j]]
+								P2_index = politician_indices[politician_indices[0] == row2[0][j].strip()].index.tolist()[0]
+								T2_index = topic_indices[topic_indices[0] == row2[2][j].strip()].index.tolist()[0]
+								p_similarity = politician_similarity[P1_index][P2_index]
+								t_similarity = topic_similarity[T1_index][T2_index]
+								lines = []
+								for alpha in range(0, 6):
+									similarity = (0.2*alpha) * p_similarity + (1 - 0.2*alpha) * t_similarity
+									lines.append("N" + `i` + "\t" + "N" + `j` + "\t" + `similarity` + "\n")
+								similarity_graph_0.write(lines[0])
+								similarity_graph_2.write(lines[1])
+								similarity_graph_4.write(lines[2])
+								similarity_graph_6.write(lines[3])
+								similarity_graph_8.write(lines[4])
+								similarity_graph_10.write(lines[5])

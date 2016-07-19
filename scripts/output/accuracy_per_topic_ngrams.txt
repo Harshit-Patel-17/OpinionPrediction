@@ -1,0 +1,21 @@
+topic , decision_tree , svm
+abortion is a woman's unrestricted right , 0.779411764706 , 0.536764705882
+absolute right to gun ownership , 0.77037037037 , 0.585185185185
+avoid foreign entanglements , 0.779411764706 , 0.551470588235
+comfortable with same-sex marriage , 0.777777777778 , 0.511111111111
+epa regulations are too restrictive , 0.755905511811 , 0.409448818898
+expand obamacare , 0.795620437956 , 0.642335766423
+expand the military , 0.717741935484 , 0.548387096774
+higher taxes on the wealthy , 0.759124087591 , 0.496350364964
+keep god in the public sphere , 0.827067669173 , 0.481203007519
+legally require hiring women & minorities , 0.666666666667 , 0.590909090909
+make voter registration easier , 0.7265625 , 0.71875
+marijuana is a gateway drug , 0.637096774194 , 0.588709677419
+pathway to citizenship for illegal aliens , 0.813432835821 , 0.44776119403
+prioritize green energy , 0.81884057971 , 0.507246376812
+privatize social security , 0.759398496241 , 0.443609022556
+stimulus better than market-led recovery , 0.822222222222 , 0.540740740741
+stricter punishment reduces crime , 0.598360655738 , 0.606557377049
+support & expand free trade , 0.611570247934 , 0.520661157025
+support american exceptionalism , 0.83606557377 , 0.426229508197
+vouchers for school choice , 0.856060606061 , 0.44696969697

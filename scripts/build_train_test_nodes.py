@@ -25,8 +25,8 @@ indices = range(m)
 shuffle(indices)
 
 for size in train_size:
-	train_file = "../data/seeds/train_nodes_" + `size` + ".txt"
-	test_file = "../data/gold_nodes/gold_nodes_" + `size` + ".txt"
+	train_file = "../data/ngrams_graphs/seeds/train_nodes_" + `size` + ".txt"
+	test_file = "../data/ngrams_graphs/gold_nodes/gold_nodes_" + `size` + ".txt"
 	with open(train_file, "w") as train_nodes:
 		with open(test_file, "w") as test_nodes:	
 			for i in range(m):

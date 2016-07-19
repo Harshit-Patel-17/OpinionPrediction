@@ -14,14 +14,17 @@ data = pd.read_csv("../data/PoliticianData2Classes.csv", header=None)
 politician_indices = pd.read_csv("../corpus/PoliticianLabels.txt", header=None)
 topic_indices = pd.read_csv("../corpus/TopicLabels.txt", header=None)
 opinion_indices = pd.read_csv("../corpus/OpinionLabels.txt", header=None)
+m = data.shape[0]
+
+base = "../data/phrase2vec_graphs/graphs/"
 
 #Build complete graph
-with open("../data/graphs/similarity_graph_0.txt", "w") as similarity_graph_0:
-	with open("../data/graphs/similarity_graph_2.txt", "w") as similarity_graph_2:
-		with open("../data/graphs/similarity_graph_4.txt", "w") as similarity_graph_4:
-			with open("../data/graphs/similarity_graph_6.txt", "w") as similarity_graph_6:
-				with open("../data/graphs/similarity_graph_8.txt", "w") as similarity_graph_8:
-					with open("../data/graphs/similarity_graph_10.txt", "w") as similarity_graph_10:
+with open(base + "similarity_graph_0.txt", "w") as similarity_graph_0:
+	with open(base + "similarity_graph_2.txt", "w") as similarity_graph_2:
+		with open(base + "similarity_graph_4.txt", "w") as similarity_graph_4:
+			with open(base + "similarity_graph_6.txt", "w") as similarity_graph_6:
+				with open(base + "similarity_graph_8.txt", "w") as similarity_graph_8:
+					with open(base + "similarity_graph_10.txt", "w") as similarity_graph_10:
 						for i in range(0, m-1):
 							print i
 							row1 = data.loc[[i]]
