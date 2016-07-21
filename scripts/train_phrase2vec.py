@@ -17,7 +17,6 @@ opinion_indices = pd.read_csv("../corpus/OpinionLabels.txt", header=None)
 
 #Build train data and test data
 m = data.shape[0]
-#n = politicians_model.docvecs[0].shape[0] + topics_model.docvecs[0].shape[0]
 n = politicians_model.docvecs[0].shape[0] + topics_model.docvecs[0].shape[0]
 X = np.zeros((m, n), dtype=np.float)
 Y = np.zeros(m, dtype=np.int)
