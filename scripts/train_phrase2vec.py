@@ -17,7 +17,7 @@ opinion_indices = pd.read_csv("../corpus/OpinionLabels.txt", header=None)
 
 #Build train data and test data
 m = data.shape[0]
-n = politicians_model.docvecs[0].shape[0] + topics_model.docvecs[0].shape[0]
+n = politicians_model.docvecs[0].shape[0]
 X = np.zeros((m, n), dtype=np.float)
 Y = np.zeros(m, dtype=np.int)
 
@@ -30,7 +30,7 @@ for index, row in data.iterrows():
 	topic_vec = topics_model.docvecs[topic_index]
 	if(opinion_index == 2):
 		continue
-	X[m] = np.concatenate((politician_vec, topic_vec))
+	X[m] = politician_vec #np.concatenate((politician_vec, topic_vec))
 	Y[m] = opinion_index
 	m = m + 1
 
@@ -56,7 +56,7 @@ print gs.best_estimator_.max_depth
 
 #Train
 from sklearn.learning_curve import learning_curve
-clf = tree.DecisionTreeClassifier(criterion='gini', max_depth=35)
+clf = tree.DecisionTreeClassifier()
 train_sizes, train_scores, valid_scores = learning_curve(clf, X, Y, cv=10)
 print train_sizes
 print train_scores
@@ -76,9 +76,9 @@ plt.title("Accuracy in Decision Tree")
 plt.legend([trn_acc, val_acc], ["On training data", "On test data"], loc=4)
 
 for i, j in zip(train_sizes, np.average(train_scores, axis=1)):
-	plt.annotate(str(j)[:4], xy=(i-100, j+0.01))
+	plt.annotate(str(j)[:4], xy=(i*0.90, j*1.005))
 
 for i, j in zip(train_sizes, np.average(valid_scores, axis=1)):
-	plt.annotate(str(j)[:4], xy=(i-100, j+0.01))
+	plt.annotate(str(j)[:4], xy=(i*0.90, j*1.005))
 
 plt.show()
